@@ -9,11 +9,12 @@ const About: React.FC = () => {
   useEffect(() => {
     gsap.to(".scrollbanner--1", {
       transform: "translate3d(0%, 50px, 20px) rotateZ(6.0deg)",
-      width: "120%",
+      width: "140%",
       scrollTrigger: {
         trigger: ".r--box",
         start: "top 40%",
         end: "top -10%",
+        // markers: true,
         scrub: 1,
       },
     });
@@ -39,7 +40,7 @@ const About: React.FC = () => {
     <div className="r--box relative overflow-hidden bg-gradient-to-br from-zinc-800 to-purple-50">
 
       <div className="absolute inset-0 z-0 font-poppins">
-        <div className="scrollbanner--1 text-xl flex justify-start items-center w-0 absolute top-[30%] left-[-1%] rotate-[8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #afa8ff,#9d95ff, #9d95ff, #262626)' }}>
+        <div className="scrollbanner--1 text-xl flex justify-start items-center w-0 absolute top-[40%] left-[-30%] rotate-[8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #afa8ff,#9d95ff, #9d95ff, #262626)' }}>
 
           <div className="scrollbar flex flex-none items-center animate-scroll">
             <div className="medium p-4">React Developer</div>

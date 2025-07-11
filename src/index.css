@@ -12,8 +12,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom animations for scrolling strips */
-
 .animate-scroll {
   animation: scroll 12s linear infinite;
 }

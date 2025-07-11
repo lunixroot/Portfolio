@@ -9,7 +9,6 @@ const Header: React.FC = () => {
         </div>
         <div className='sm:hidden'>
           <img src="/menu.svg" className='w-8 h-8' onClick={() => {
-            // Toggle mobile menu logic can be added here
             const menu = document.getElementById('menu');
             if (menu) {
               menu.classList.toggle('hidden');

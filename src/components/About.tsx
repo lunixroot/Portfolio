@@ -39,7 +39,7 @@ const About: React.FC = () => {
     <div className="r--box relative overflow-hidden bg-gradient-to-br from-zinc-800 to-purple-50">
 
       <div className="absolute inset-0 z-0 font-poppins">
-        <div className="scrollbanner--1 text-xl flex justify-start items-center w-0 absolute top-[30%] left-[-1%] rotate-[8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #9d95ff, #9d95ff, #262626)' }}>
+        <div className="scrollbanner--1 text-xl flex justify-start items-center w-0 absolute top-[30%] left-[-1%] rotate-[8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #afa8ff,#9d95ff, #9d95ff, #262626)' }}>
 
           <div className="scrollbar flex flex-none items-center animate-scroll">
             <div className="medium p-4">React Developer</div>
@@ -73,7 +73,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        <div className="scrollbanner--2 text-xl flex justify-start items-center w-0 absolute bottom-[30%] left-[-1%] rotate-[-8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #9d95ff, #9d95ff, #262626)' }}>
+        <div className="scrollbanner--2 text-xl flex justify-start items-center w-0 absolute bottom-[30%] left-[-1%] rotate-[-8deg] overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg, #afa8ff,#9d95ff, #9d95ff, #262626)' }}>
 
           <div className="scrollbar flex flex-none items-center animate-scroll">
             <div className="medium p-4">JavaScript</div>

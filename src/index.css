@@ -11,3 +11,19 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Custom animations for scrolling strips */
+
+.animate-scroll {
+  animation: scroll 12s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100%));
+  }
+}
+

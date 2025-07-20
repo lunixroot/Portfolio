@@ -42,10 +42,12 @@ const Projects: React.FC = () => {
   ];
 
   return (
-    <section id="projects" className="py-20 px-8 max-w-full mx-auto bg-gradient-to-tr from-zinc-800 to-purple-50">
-      <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800 relative">
+    // <section id="projects" className="py-20 px-8 max-w-full mx-auto bg-gradient-to-tr from-zinc-800 to-purple-50">
+    <section id="projects" className="py-20 px-8 max-w-full mx-auto bg-black">
+      <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-white relative">
         Projects
-        <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-cyan-400 rounded"></span>
+        <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-28 h-1 rounded [background-image:linear-gradient(90deg,#ffffff_5%,#B200CE_50%,#5A03CC_85%)] "></span>
+        {/* bg-[#fb00ff]  */}
       </h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8 mt-12 max-w-6xl mx-auto">
         {projectList.map((proj, index) => (

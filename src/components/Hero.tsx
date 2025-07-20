@@ -152,10 +152,10 @@ const Hero: React.FC = () => {
         <div className="overflow-hidden">
           <p
             ref={pRef}
-            className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl md:text-xl font-thin  mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            A passionate Frontend Developer crafting beautiful and functional
-            web experiences
+            Front-End developer specializing in React, JavaScript, and creating web magic. ✨ <br />
+            Code enthusiast by day, UI/UX perfectionist by night - creating digital experiences that wow.
           </p>
         </div>
         <div className="overflow-hidden">

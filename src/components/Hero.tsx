@@ -124,45 +124,43 @@ const Hero: React.FC = () => {
     <>
       <section
         id="hero"
-        className="min-h-[90vh] flex flex-col responsive justify-center items-center text-white text-center p-8 bg-black"
+        className="min-h-screen flex flex-col responsive justify-center items-center text-white text-center p-4 sm:p-8 bg-black relative overflow-hidden"
       >
-        {/* <div className="absolute -top-40 left-[60vh] w-full h-screen z-0 border border-transparent rounded-full">
-          <div className=" bg-[#B200CE] blur-[80px] opacity-1 rounded-full z-10 w-[40vw] h-[22vw]"></div>
-        </div> */}
-        {/* <div className="absolute top-0 left-0 bg-[#B200CE] blur-3xl opacity-1 rounded-full z-10 w-[30vw] h-[20vw]"></div> */}
+        
         <div
           ref={blur1}
-          className="absolute -top-[25vh] left-100 bg-[#fb00ff] blur-[100px] opacity-1 rounded-full z-10 w-[40vw] h-[22vw]"
+          className="absolute -top-[24vh] sm:-top-[18vh] md:-top-[25vh] left-[26vw] sm:left-[26vw] md:left-[30vw] bg-[#fb00ff] blur-[40px] sm:blur-[60px] md:blur-[100px] opacity-50 sm:opacity-70 md:opacity-100 rounded-full z-10 w-[50vw] sm:w-[45vw] md:w-[40vw] h-[25vw] sm:h-[25vw] md:h-[22vw]"
         ></div>
 
         <div
           ref={blur2}
-          className="absolute -top-20 left-[49vh] bg-[#6800AD] blur-[80px] opacity-1 rounded-full z-10 w-[20vw] h-[10vw]"
+          className="absolute -top-[0vh] sm:-top-[10vh] md:-top-[15vh] left-[0vw] sm:left-[10vw] md:left-[20vw] bg-[#6800AD] blur-[30px] sm:blur-[50px] md:blur-[80px] opacity-50 sm:opacity-70 md:opacity-100 rounded-full z-10 w-[25vw] sm:w-[22vw] md:w-[20vw] h-[12vw] sm:h-[11vw] md:h-[10vw]"
         ></div>
 
-        <div className="overflow-hidden">
+        <div className="overflow-hidden relative z-20 w-full">
           <h1
             ref={h1Ref}
-            className="text-5xl md:text-6xl font-bold px-2 mb-6 text-transparent bg-clip-text [background-image:linear-gradient(180deg,#ffffff_5%,#B200CE_50%,#5A03CC_85%)] "
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold px-2 mb-4 sm:mb-6 text-transparent bg-clip-text [background-image:linear-gradient(180deg,#ffffff_5%,#B200CE_50%,#5A03CC_85%)] max-w-[95vw] mx-auto"
           >
             {/* bg-gradient-to-b from-white via-[#B200CE] to-[#5A03CC] */}
             Hi, I'm Adarsh Thakur
           </h1>
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden relative z-20 w-full">
           <p
             ref={pRef}
-            className="text-xl md:text-xl font-thin  mb-8 max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base md:text-lg lg:text-xl font-thin mb-6 sm:mb-8 max-w-[90vw] sm:max-w-[80vw] md:max-w-2xl mx-auto leading-relaxed px-2 sm:px-4"
           >
-            Front-End developer specializing in React, JavaScript, and creating web magic. ✨ <br />
-            Code enthusiast by day, UI/UX perfectionist by night - creating digital experiences that wow.
+            Front-End developer specializing in React, JavaScript, and creating web magic. ✨ 
+            <br className="hidden md:block" />
+            <span className="block md:inline mt-2 md:mt-0">Code enthusiast by day, UI/UX perfectionist by night - creating digital experiences that wow.</span>
           </p>
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden relative z-20 w-full">
           <a
             ref={buttonRef}
             href="#projects"
-            className="inline-block px-8 py-4 bg-[#B200CE] text-white font-semibold rounded-lg hover:bg-[#c83dff]  transform hover:-translate-y-2 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-block px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 bg-[#B200CE] text-white font-semibold rounded-lg hover:bg-[#c83dff] transform hover:-translate-y-2 transition-all duration-300 shadow-lg hover:shadow-xl text-xs sm:text-sm md:text-base"
           >
             View My Work
           </a>
@@ -174,12 +172,12 @@ const Hero: React.FC = () => {
           <div className="absolute -left-20 -inset-1 bg-[#B200CE] blur-lg opacity-60 rounded-md -z-10 w-40 h-10"></div>
         </div>
 
-        <div className=" absolute bottom-20">
-          <h2 className="text-4xl md:text-5xl mb-2 font-mono text-center text-zinc-700 relative">
+        <div className="absolute bottom-6 sm:bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-[90vw]">
+          <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl mb-2 font-mono text-center text-zinc-700 relative px-2 sm:px-4">
             Code, without the hassle
           </h2>
-          <span className="text-sm md:text-lg text-center font-thin text-zinc-500 relative hover:text-zinc-300">
-            <a href="#about">
+          <span className="text-xs sm:text-sm md:text-base lg:text-lg text-center font-thin text-zinc-500 relative hover:text-zinc-300 block">
+            <a href="#about" className="inline-block">
               scroll down ⇣
             </a>
           </span>

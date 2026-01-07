@@ -22,7 +22,8 @@ const Contact: React.FC = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      const response = await axios.post('http://localhost:3000/api/email/send', form);
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+      const response = await axios.post(`${backendUrl}/api/email/send`, form);
       setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
       setForm({ name: '', email: '', message: '' });
     } catch (error: any) {

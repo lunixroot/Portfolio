@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 interface FormData {
@@ -8,14 +9,30 @@ interface FormData {
 
 const Contact: React.FC = () => {
   const [form, setForm] = useState<FormData>({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<{ type: 'success' | 'error' | ''; message: string }>({ type: '', message: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Form submitted (not really)!');
+    setIsLoading(true);
+    setStatus({ type: '', message: '' });
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/email/send', form);
+      setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
+      setForm({ name: '', email: '', message: '' });
+    } catch (error: any) {
+      setStatus({ 
+        type: 'error', 
+        message: error.response?.data?.message || 'Failed to send message. Please try again.' 
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -109,11 +126,18 @@ const Contact: React.FC = () => {
             />
           </div>
           
+          {status.message && (
+            <div className={`mb-6 p-4 rounded-lg ${status.type === 'success' ? 'bg-green-500 bg-opacity-20 border border-green-500 text-green-300' : 'bg-red-500 bg-opacity-20 border border-red-500 text-red-300'}`}>
+              {status.message}
+            </div>
+          )}
+          
           <button 
             type="submit" 
-            className="w-full bg-[#b833ba] hover:bg-[#b933b2] text-white font-semibold py-4 px-6 rounded-lg transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl"
+            disabled={isLoading}
+            className="w-full bg-[#b833ba] hover:bg-[#b933b2] text-white font-semibold py-4 px-6 rounded-lg transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            Send Message
+            {isLoading ? 'Sending...' : 'Send Message'}
           </button>
           
         </form>

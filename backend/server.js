@@ -10,16 +10,32 @@ const app = express()
 // CORS configuration for production
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log('Request from origin:', origin);
+    
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    const allowedOrigins = process.env.FRONTEND_URL 
-      ? process.env.FRONTEND_URL.split(',')
-      : ['*'];
+    // Check if origin matches allowed patterns
+    const allowedPatterns = [
+      /^https:\/\/.*\.vercel\.app$/,  // All Vercel domains
+      /^http:\/\/localhost:\d+$/,      // Local development
+    ];
     
-    if (allowedOrigins.includes('*') || allowedOrigins.indexOf(origin) !== -1) {
+    // Check environment variable for specific domains
+    if (process.env.FRONTEND_URL && process.env.FRONTEND_URL !== '*') {
+      const allowedOrigins = process.env.FRONTEND_URL.split(',').map(url => url.trim());
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+    }
+    
+    // Check if origin matches any pattern
+    const isAllowed = allowedPatterns.some(pattern => pattern.test(origin));
+    
+    if (isAllowed || process.env.FRONTEND_URL === '*') {
       callback(null, true);
     } else {
+      console.log('CORS blocked for origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },

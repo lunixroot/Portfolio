@@ -34,7 +34,12 @@ app.use(cors(corsOptions))
 app.use('/api/email', emailRoutes)
 
 app.get('/', (req, res) => {
-    res.json({message: 'email sender api running'})
+    res.json({
+        message: 'email sender api running',
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        emailConfigured: !!(process.env.EMAIL_USER && (process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD))
+    })
 })
 
 const PORT = process.env.PORT || 3000;

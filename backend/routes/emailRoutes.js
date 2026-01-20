@@ -6,6 +6,7 @@ router.post('/send', async (req, res) => {
     try {
         const { name, email, message } = req.body;
 
+        // Validation
         if (!name || !email || !message) {
             return res.status(400).json({
                 success: false,
@@ -13,6 +14,16 @@ router.post('/send', async (req, res) => {
             })
         }
 
+        // Check if email credentials are configured
+        if (!process.env.EMAIL_USER || (!process.env.EMAIL_PASS && !process.env.EMAIL_PASSWORD)) {
+            console.error('Email credentials not configured!');
+            return res.status(500).json({
+                success: false,
+                message: 'Server email configuration error. Please contact administrator.'
+            });
+        }
+
+        console.log('Creating email transporter...');
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -21,17 +32,9 @@ router.post('/send', async (req, res) => {
             }
         })
 
-
-        // const mailOptions = {
-        //     from: email,
-        //     to: process.env.EMAIL_USER,
-        //     subject: `Portfolio Contact from ${name}`,
-        //     text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-        //     html: `<h3>New Contact Form Submission</h3>
-        //            <p><strong>Name:</strong> ${name}</p>
-        //            <p><strong>Email:</strong> ${email}</p>
-        //            <p><strong>Message:</strong> ${message}</p>`
-        // }
+        // Verify transporter configuration
+        await transporter.verify();
+        console.log('Email transporter verified successfully');
 
         const ownerMailOptions = {
             from: process.env.EMAIL_USER,
@@ -47,22 +50,21 @@ router.post('/send', async (req, res) => {
             text: `Hi ${name},\n\nThank you for your message!\n\nBest regards,\nAdarsh`
         }
 
-        // await transporter.sendMail(mailOptions)
-
-         await transporter.sendMail(ownerMailOptions)
+        console.log('Sending emails...');
+        await transporter.sendMail(ownerMailOptions)
         await transporter.sendMail(userMailOptions)
-
+        console.log('Emails sent successfully');
 
         res.status(200).json({
             success: true,
             message: 'email successfully sent'
         })
     } catch (error) {
-        console.error('error:', error)
+        console.error('Error sending email:', error)
         res.status(500).json({
             success: false,
-            message: 'email error',
-            error: error.message
+            message: 'Failed to send email. Please try again.',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
         })
     }
 })

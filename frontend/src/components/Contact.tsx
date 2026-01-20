@@ -18,18 +18,54 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setStatus({ 
+        type: 'error', 
+        message: 'Please fill in all fields.' 
+      });
+      return;
+    }
+
     setIsLoading(true);
     setStatus({ type: '', message: '' });
 
     try {
       const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
-      const response = await axios.post(`${backendUrl}/api/email/send`, form);
-      setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
+      console.log('Sending to:', `${backendUrl}/api/email/send`);
+      console.log('Form data:', form);
+      
+      const response = await axios.post(`${backendUrl}/api/email/send`, form, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 10000, // 10 second timeout
+      });
+      
+      console.log('Response:', response.data);
+      setStatus({ type: 'success', message: 'Message sent successfully! I\'ll get back to you soon.' });
       setForm({ name: '', email: '', message: '' });
     } catch (error: any) {
+      console.error('Error details:', error);
+      console.error('Error response:', error.response);
+      
+      let errorMessage = 'Failed to send message. Please try again.';
+      
+      if (error.response) {
+        // Server responded with error
+        errorMessage = error.response.data?.message || `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request made but no response
+        errorMessage = 'Cannot reach server. Please check your connection.';
+      } else {
+        // Something else happened
+        errorMessage = error.message || 'An unexpected error occurred.';
+      }
+      
       setStatus({ 
         type: 'error', 
-        message: error.response?.data?.message || 'Failed to send message. Please try again.' 
+        message: errorMessage
       });
     } finally {
       setIsLoading(false);
@@ -97,7 +133,9 @@ const Contact: React.FC = () => {
               placeholder="Your Name" 
               value={form.name} 
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none transition-all duration-300"
+              required
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
           
@@ -110,7 +148,9 @@ const Contact: React.FC = () => {
               placeholder="Your Email" 
               value={form.email} 
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none transition-all duration-300"
+              required
+              disabled={isLoading}
+              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
           
@@ -122,8 +162,10 @@ const Contact: React.FC = () => {
               placeholder="Your Message" 
               value={form.message} 
               onChange={handleChange}
+              required
+              disabled={isLoading}
               rows={5}
-              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none resize-none transition-all duration-300"
+              className="w-full px-4 py-3 bg-zinc-800 bg-opacity-90 text-white placeholder-gray-400 rounded-lg border-0 focus:ring-2 focus:ring-purple-400 outline-none resize-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
           

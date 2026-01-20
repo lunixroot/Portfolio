@@ -25,16 +25,22 @@ router.post('/send', async (req, res) => {
 
         console.log('Creating email transporter...');
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // use TLS
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD
-            }
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000,
+            socketTimeout: 15000
         })
 
-        // Verify transporter configuration
-        await transporter.verify();
-        console.log('Email transporter verified successfully');
+        console.log('Attempting to send emails...');
 
         const ownerMailOptions = {
             from: process.env.EMAIL_USER,

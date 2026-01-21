@@ -1,10 +1,15 @@
 const express = require('express')
-const sgMail = require('@sendgrid/mail')
+const nodemailer = require('nodemailer')
 const router = express.Router()
 
 router.post('/send', async (req, res) => {
     try {
         const { name, email, message } = req.body;
+
+        // Debug logging
+        console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'NOT SET');
+        console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'NOT SET');
+        console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'Set' : 'NOT SET');
 
         // Validation
         if (!name || !email || !message) {
@@ -14,55 +19,64 @@ router.post('/send', async (req, res) => {
             })
         }
 
-        // Check if SendGrid API key is configured
-        if (!process.env.SENDGRID_API_KEY) {
-            console.error('SendGrid API key not configured!');
+        // Check if email credentials are configured
+        if (!process.env.EMAIL_USER || (!process.env.EMAIL_PASS && !process.env.EMAIL_PASSWORD)) {
+            console.error('Email credentials not configured!');
             return res.status(500).json({
                 success: false,
-                message: 'Email service not configured. Please contact administrator.'
+                message: 'Server email configuration error. Please contact administrator.'
             });
         }
 
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        console.log('Creating email transporter...');
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // use TLS
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000,
+            socketTimeout: 15000
+        })
 
-        // Email to owner
-        const ownerMsg = {
-            to: process.env.EMAIL_USER,
-            from: process.env.EMAIL_USER, // Must be verified sender in SendGrid
-            subject: `New contact from ${name}`,
-            text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message}`,
-            html: `<h3>New Contact Form Submission</h3>
-                   <p><strong>Name:</strong> ${name}</p>
-                   <p><strong>Email:</strong> ${email}</p>
-                   <p><strong>Message:</strong></p>
-                   <p>${message}</p>`
-        };
+        console.log('Attempting to send emails...');
 
-        // Email to user
-        const userMsg = {
-            to: email,
+        const ownerMailOptions = {
             from: process.env.EMAIL_USER,
-            subject: 'Thank you for contacting me!',
-            text: `Hi ${name},\n\nThank you for your message! I'll get back to you soon.\n\nBest regards,\nAdarsh Thakur`,
-            html: `<p>Hi ${name},</p>
-                   <p>Thank you for your message! I'll get back to you soon.</p>
-                   <p>Best regards,<br>Adarsh Thakur</p>`
-        };
+            to: process.env.EMAIL_USER,
+            subject: `new contact from ${name}`,
+            text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message}`
+        }
 
-        console.log('Sending emails via SendGrid...');
-        await sgMail.send(ownerMsg);
-        await sgMail.send(userMsg);
-        console.log('Emails sent successfully via SendGrid!');
+        const userMailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'thank you for contacting me!',
+            text: `Hi ${name},\n\nThank you for your message!\n\nBest regards,\nAdarsh`
+        }
+
+        console.log('Sending emails...');
+        await transporter.sendMail(ownerMailOptions)
+        await transporter.sendMail(userMailOptions)
+        console.log('Emails sent successfully');
 
         res.status(200).json({
             success: true,
-            message: 'Email successfully sent!'
+            message: 'email successfully sent'
         })
     } catch (error) {
-        console.error('SendGrid Error:', error.message || error);
-        if (error.response) {
-            console.error('SendGrid Error Body:', error.response.body);
-        }
+        console.error('============ EMAIL ERROR ============');
+        console.error('Error sending email:', error);
+        console.error('Error message:', error.message);
+        console.error('Error code:', error.code);
+        console.error('Error command:', error.command);
+        console.error('====================================');
         res.status(500).json({
             success: false,
             message: 'Failed to send email. Please try again.',
